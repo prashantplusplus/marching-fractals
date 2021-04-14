@@ -65,17 +65,30 @@ float sdTorus( vec3 p, vec2 t )
   vec2 q = vec2(length(p.xz)-t.x,p.y);
   return length(q)-t.y;
 }
+float opTwist( vec3 p )
+{
+    const float k = 10.0; // or some other amount
+    float c = cos(k*p.y);
+    float s = sin(k*p.y);
+    mat2  m = mat2(c,-s,s,c);
+    vec3  q = vec3(m*p.xz,p.y);
+    return sdBox(q,vec3(0.145));
+}
 float sdf(vec3 p){
     vec3 p1 = rotate(p,vec3(1.),iTime/5.);
-    float box = sdBox(p1,vec3(0.15));
+    // float box = sdBox(p1,vec3(0.15));
+    float box = opTwist(p1);
     float mSphere = sdSphere(p - vec3(mouse*5.,0.),0.45);
     float sphere2 = sdSphere(p,0.46);
-    //float cylinder = sdCylinder(p, vec3(0.2));
+    float cylinder = sdCylinder(p, vec3(0.2));
     float torus = sdTorus(p1,vec2(0.6,0.1));
     float res = smin(box,torus,0.6);
     res = smin(res,sphere2,0.6);
     res = smin(res,mSphere,0.6);
     return res;
+    //float plane = p.x;
+    //return min(mSphere,plane);
+    //return plane;
 }
 
 vec3 calcNormal( in vec3 p ) // for function f(p)

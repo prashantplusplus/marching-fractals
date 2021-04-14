@@ -1,4 +1,5 @@
 import * as THREE from './lib/three.module.js';
+import { OrbitControls } from './lib/OrbitControls.js';
 const currentShader = 'shaders/basic.frag'; // current fragment shader path
 //import matcap from '../matcap1.png';
 /**
@@ -101,6 +102,7 @@ async function main() {
    * @param {Number} time - Render time
    */
    
+  //let controls = new OrbitControls(camera, renderer.domElement);
   function render(time) {
     time *= 0.001; // convert to seconds
 
@@ -114,8 +116,9 @@ async function main() {
     if(keyboard)
       uniforms.keyboard.value =  keyboard;
 
+    
     renderer.render(scene, camera);
-
+    //controls.update();
     requestAnimationFrame(render);
   }
 
